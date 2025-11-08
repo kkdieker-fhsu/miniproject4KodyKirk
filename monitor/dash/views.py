@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
-from .models import Endpoints
+from .models import Endpoints, TrafficLog
 
 
 def index(request):
@@ -16,4 +16,5 @@ def traffic(request):
 
 def detail(request, ip_address):
     endpoint = get_object_or_404(Endpoints, pk=ip_address)
-    return render(request, "dash/detail.html", {'endpoint': endpoint})
+    traffic = TrafficLog.objects.filter(ip_src=endpoint.ip_address).order_by('-interval_start')
+    return render(request, "dash/detail.html", {'endpoint': endpoint, 'traffic': traffic})

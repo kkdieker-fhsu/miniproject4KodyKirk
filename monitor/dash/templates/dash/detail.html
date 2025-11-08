@@ -20,5 +20,15 @@
     Last seen - {{ endpoint.last_seen }}
 </ul>
 
+{% if traffic %}
+    <ul>
+        {% for t in traffic %}
+            <li>{{ t.ip_dst }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No recent traffic recorded.</p>
+{% endif %}
+
 </body>
 </html>
