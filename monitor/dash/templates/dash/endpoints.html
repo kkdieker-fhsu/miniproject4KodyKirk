@@ -5,7 +5,7 @@
 {% if endpoint_list %}
     <ul>
         {% for endpoint in endpoint_list %}
-            <li><a href="{% url 'detail' endpoint.ip_address %}">{{ endpoint.ip_address }}</a></li>
+            <li><a href="{% url 'dash:detail' endpoint.ip_address %}">{{ endpoint.ip_address }}</a></li>
         {% endfor %}
     </ul>
 {% else %}

@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name = 'dash'
+
 urlpatterns = [
     path("", views.index, name="index"),
 
@@ -9,7 +11,12 @@ urlpatterns = [
 
     path("traffic/", views.traffic, name="traffic"),
 
-    path("detail/<str:ip_address>/", views.detail, name="detail"),
+    path("endpoints/detail/<str:ip_address>/", views.detail, name="detail"),
 
+    path("endpoints/register/", views.endpoint_register, name="endpoint_register"),
+
+    path("endpoints/submission/", views.endpoint_submission, name="endpoint_submission"),
+
+    path("traffic/external_connections/", views.external_connections, name="external_connections"),
 
 ]
