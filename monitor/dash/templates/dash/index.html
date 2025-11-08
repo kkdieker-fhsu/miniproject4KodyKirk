@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% if endpoint_list %}
+    <ul>
+        {% for endpoint in endpoint_list %}
+            <li><a href="/dash/detail/{{ endpoint.ip_address }}/">{{ endpoint.ip_address }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No endpoints found.</p>
+{% endif %}
+</body>
+</html>
