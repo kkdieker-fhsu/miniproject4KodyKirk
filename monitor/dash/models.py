@@ -8,7 +8,7 @@ class Endpoints(models.Model):
     last_seen = models.DateTimeField(auto_now=True, auto_now_add=False)
 
 class TrafficLog(models.Model):
-    indata = models.BigIntegerField()
-    outdata = models.BigIntegerField()
+    data_in = models.BigIntegerField()
+    data_out = models.BigIntegerField()
     interval_start = models.DateTimeField(auto_now=True, auto_now_add=False)
     endpoint = models.ForeignKey(Endpoints, on_delete=models.CASCADE)
