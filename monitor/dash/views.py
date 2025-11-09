@@ -11,7 +11,7 @@ from .datafunctions import parse_pcap
 def index(request):
 
     recent_endpoints = Endpoints.objects.order_by('-last_seen')[:5]
-    talkative_endpoints = Endpoints.objects.annotate(
+    talkative_endpoints = TrafficLog.objects.annotate(
         total_traffic=F('data_in') + F('data_out')
     ).order_by('-total_traffic')[:5]
 
