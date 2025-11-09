@@ -10,12 +10,31 @@
                 <th>Destination IP</th>
                 <th>Data In (Bytes)</th>
                 <th>Data Out (Bytes)</th>
+                <th>Protocols</th>
             </tr>
         </thead>
 
         <tbody>
-
+            {% if pairs %}
+                {% for pair in pairs %}
+                    <tr>
+                        <td>{{ pair.ip_src }}</td>
+                        <td>{{ pair.ip_dst }}</td>
+                        <td>{{ pair.data_in }}</td>
+                        <td>{{ pair.data_out }}</td>
+                        <td>{{ pair.protocol }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#traffic_table').DataTable();
+        });
+    </script>
 {% endblock %}
