@@ -19,6 +19,6 @@ urlpatterns = [
 
     path("endpoints/submission/", views.endpoint_submission, name="endpoint_submission"),
 
-    path("traffic/external_connections/", views.external_connections, name="external_connections"),
+    path("endpoints/communications/", views.communications, name="communications"),
 
 ]

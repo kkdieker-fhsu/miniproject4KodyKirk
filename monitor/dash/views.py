@@ -35,12 +35,16 @@ def traffic_upload(request):
                     mac, timestamp = data
                     Endpoints.objects.update_or_create(
                         ip_address=ip,
-                        defaults={'mac_address': mac, 'last_seen': timestamp},
+                        defaults={'mac_address': mac,
+                                  'last_seen': timestamp},
                     )
 
                 for traffic_pairs, traffic_data in traffic.items():
                     ip_src, ip_dst = traffic_pairs
-                    data_out, data_in = traffic_data
+                    data_out = traffic_data[0]
+                    data_in = traffic_data[1]
+                    packets = traffic_data[2]
+                    protocol = traffic_data[3]
 
                     try:
                         ip_src = Endpoints.objects.get(ip_address=ip_src)
@@ -49,7 +53,10 @@ def traffic_upload(request):
                     TrafficLog.objects.update_or_create(
                         ip_src=ip_src,
                         ip_dst=ip_dst,
-                        defaults={'data_in': data_in, 'data_out': data_out},
+                        defaults={'data_in': data_in,
+                                  'data_out': data_out,
+                                  'protocol': protocol,
+                                  'total_packets': packets},
                     )
 
                 return HttpResponseRedirect(reverse("dash:endpoints"))
@@ -67,8 +74,9 @@ def detail(request, ip_address):
     return render(request, "dash/detail.html", {'endpoint': endpoint, 'traffic': traffic})
 
 @login_required
-def external_connections(request):
-    return render(request, "dash/external.html")
+def communications(request):
+    pairs = TrafficLog.objects.all()
+    return render(request, "dash/communications.html", {'pairs': pairs})
 
 @login_required
 def endpoint_register(request):

@@ -51,9 +51,11 @@ def parse_pcap(file):
             if isinstance(eth.data, dpkt.ip.IP):
                 ip = eth.data
                 ip_len = ip.len
+                protocol = ip.get_proto(ip.p).__name__
             elif isinstance(eth.data, dpkt.ip6.IP6):
                 ip = eth.data
                 ip_len = eth.data.plen
+                protocol = ip.get_proto(ip.p).__name__
             else:
                 continue
 
@@ -77,17 +79,22 @@ def parse_pcap(file):
             known_ip.update(addition)
 
         if (inet_to_str(ip.src), inet_to_str(ip.dst)) not in traffic:
-            new_traffic = {(inet_to_str(ip.src), inet_to_str(ip.dst)): ip_len}
+            #unique pair is the key, values are length of the packet, total number of packets, and the protocol
+            new_traffic = {(inet_to_str(ip.src), inet_to_str(ip.dst)): [ip_len, 1, [protocol]]}
             traffic.update(new_traffic)
 
         else:
-            traffic[(inet_to_str(ip.src), inet_to_str(ip.dst))] += ip_len
+            traffic[(inet_to_str(ip.src), inet_to_str(ip.dst))][0] += ip_len
+            traffic[(inet_to_str(ip.src), inet_to_str(ip.dst))][1] += 1
+            if protocol not in traffic[(inet_to_str(ip.src), inet_to_str(ip.dst))][2]:
+                traffic[(inet_to_str(ip.src), inet_to_str(ip.dst))][2].append(protocol)
 
     traffic_data = {}
     for pairs in traffic:
         try:
-            traffic_data[pairs] = (traffic[pairs], traffic[pairs[::-1]])
+            traffic_data[pairs] = (traffic[pairs][0], traffic[pairs[::-1]][0], traffic[pairs][1], traffic[pairs][2])
 
         except:
-            traffic_data[pairs] = (traffic[pairs], 0)
+            traffic_data[pairs] = (traffic[pairs][0], 0, traffic[pairs][1], traffic[pairs][2])
+
     return known_ip, traffic_data

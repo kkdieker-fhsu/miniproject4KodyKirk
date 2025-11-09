@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if pairs %}
+        {% for pair in pairs %}
+            <p>{{ pair.ip_src }} --- {{ pair.ip_dst }}</p>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
