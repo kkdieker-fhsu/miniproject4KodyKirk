@@ -5,7 +5,6 @@ from .models import Endpoints, TrafficLog
 from .forms import registerendpoint, uploadpcap
 from .datafunctions import parse_pcap
 
-
 def index(request):
     return render(request, "dash/index.html")
 
