@@ -54,8 +54,8 @@ def parse_pcap(file):
                 protocol = ip.get_proto(ip.p).__name__
             elif isinstance(eth.data, dpkt.ip6.IP6):
                 ip = eth.data
-                ip_len = eth.data.plen
-                protocol = ip.get_proto(ip.p).__name__
+                ip_len = eth.data.plen + 40
+                protocol = ip.get_proto(ip.nxt).__name__
             else:
                 continue
 

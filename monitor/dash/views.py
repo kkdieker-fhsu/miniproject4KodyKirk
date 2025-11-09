@@ -69,7 +69,7 @@ def traffic_upload(request):
                                   'total_packets': packets},
                     )
 
-                return HttpResponseRedirect(reverse("dash:endpoints"))
+                return HttpResponseRedirect(reverse("dash:communications"))
         else:
             context = {'form': form}
             return render(request, "dash/traffic.html", context)

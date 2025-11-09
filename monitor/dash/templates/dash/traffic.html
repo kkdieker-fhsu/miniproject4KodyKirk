@@ -1,11 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Upload PCAP File</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-muted">Upload a .pcap or .pcapng file to add endpoints to the database.</p>
 
-<form action="{% url 'dash:traffic_upload' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Upload</button>
-</form>
+                <form action="{% url 'dash:traffic_upload' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ field.label_tag }}
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors.as_text }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.non_field_errors.as_text }}
+                        </div>
+                    {% endif %}
+
+                    <hr class="my-4">
+
+                    <button type="submit" class="btn btn-primary">
+                        Upload
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
