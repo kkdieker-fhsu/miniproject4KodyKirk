@@ -1,0 +1,11 @@
+:root {
+    --primary-color: #0d47a1; /* A professional, dark blue */
+    --primary-hover: #0a3a82;
+    --bg-color: #f8f9fa;      /* Very light gray background */
+    --card-bg: #ffffff;       /* White for cards, tables */
+    --text-color: #333333;
+    --text-light: #555555;
+    --border-color: #dee2e6;  /* Light border for tables/inputs */
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
