@@ -2,7 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from .models import Endpoints, TrafficLog
-from .forms import registerendpoint, uploadpcap, parse_pcap
+from .forms import registerendpoint, uploadpcap
+from .datafunctions import parse_pcap
 
 
 def index(request):
