@@ -1,36 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ endpoint.ip_address }}</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4">{{ endpoint.ip_address }}</h1>
+        <a href="{% url 'dash:index' %}" class="btn btn-outline-secondary">Back to List</a>
+    </div>
 
-<ul>
-<li>
-    Mac address - {{ endpoint.mac_address }}
-</li>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Endpoint Details</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>MAC Address:</strong> {{ endpoint.mac_address }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Hostname:</strong> {{ endpoint.hostname|default:"N/A" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Last Seen:</strong> {{ endpoint.last_seen }}
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-<li>
-    Hostname - {{ endpoint.hostname }}
-</li>
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Destinations</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% if traffic %}
+                        {% for t in traffic %}
+                            <li class="list-group-item">
+                                <h6 class="mb-1">{{ t.ip_dst }}</h6>
+                                <small class="text-muted">
+                                    Data Sent: {{ t.data_out }} bytes
+                                    <span class="mx-2">|</span>
+                                    Data Received: {{ t.data_in }} bytes
+                                </small>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">
+                            No recent traffic recorded.
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
-<li>
-    Last seen - {{ endpoint.last_seen }}
-</li>
-
-<li>
-Recent destinations -
-<ul>
-{% if traffic %}
-    {% for t in traffic %}
-        <li>{{ t.ip_dst }}</li>
-        <ul>
-            <li>Data received - {{ t.data_in }} bytes</li>
-            <li>Data sent - {{ t.data_out }} bytes</li>
-        </ul>
-    {% endfor %}
-{% else %}
-    <li>No recent traffic recorded.</li>
-{% endif %}
-</ul>
-</li>
-</ul>
 {% endblock %}
