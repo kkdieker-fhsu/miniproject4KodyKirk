@@ -2,10 +2,75 @@
 
 {% block content %}
 
-<ul>
-    <li><a href="{% url 'dash:endpoints' %}">Endpoints</a></li>
-    <li><a href="{% url 'dash:communications' %}">Traffic Logs</a></li>
-    <li><a href="{% url 'dash:traffic' %}">Upload pcap</a></li>
-</ul>
+    <h1 class="display-5 mb-4">Dashboard Overview</h1>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary"><a href="{% url 'dash:endpoints' %}">Total Endpoints</a></h5>
+                    <p class="card-text display-6">{{ total_endpoints }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Total Data In</h5>
+                    <p class="card-text display-6">{{ total_data_in|filesizeformat }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger">Total Data Out</h5>
+                    <p class="card-text display-6">{{ total_data_out|filesizeformat }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Most Recently Seen Endpoints</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% if recent_endpoints %}
+                        {% for endpoint in recent_endpoints %}
+                            <a href="{% url 'dash:detail' endpoint.ip_address %}" class="list-group-item list-group-item-action">
+                                <strong>{{ endpoint.ip_address }}</strong>
+                                <small class="text-muted float-end">{{ endpoint.last_seen|timesince }} ago</small>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">No endpoints found.</li>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Talkative Endpoints</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% if talkative_endpoints %}
+                        {% for pair in talkative_endpoints %}
+                            <a href="{% url 'dash:detail' pair.ip_src.ip_address %}" class="list-group-item list-group-item-action">
+                                <strong>{{ pair.ip_src }} &rarr; {{ pair.ip_dst }}</strong>
+                                <small class="text-muted float-end">{{ pair.total_traffic|filesizeformat }}</small>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">No traffic logs found.</li>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

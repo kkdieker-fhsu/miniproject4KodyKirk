@@ -29,7 +29,7 @@ def index(request):
         'total_data_out': total_traffic.get('total_data_out', 0),
     }
 
-    return render(request, "dash/index.html")
+    return render(request, "dash/index.html", context)
 
 @login_required
 def endpoints(request):
