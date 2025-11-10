@@ -66,7 +66,7 @@ Kody Kirk
 
 * [Django](https://docs.djangoproject.com/en/5.2/) for the web framework
 * [dpkt](https://kbandla.github.io/dpkt/) for packet parsing
-* [Wireshark](https://wiki.wireshark.org/samplecaptures#sample-captures) for sample pcaps, in particular Johannes Weber.
+* [Wireshark](https://wiki.wireshark.org/samplecaptures#sample-captures) for sample pcaps, in particular Johannes Weber
 * [DataTables](https://datatables.net/) for managing tables
 * [Bootstrap](https://getbootstrap.com/) for styling
 * [jQuery](https://jquery.com/) for DataTables
