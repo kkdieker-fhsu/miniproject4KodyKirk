@@ -22,7 +22,7 @@ Package requirements are in the requirements.txt file. Requires Django and dpkt.
 
 For the pcap file, you can create your own, or Wireshark provides a number of 
 [sample pcaps](https://wiki.wireshark.org/samplecaptures#sample-captures) that I drew from to verify functionality. 
-In particular, I used 'The-Ultimate-PCAP.7z' by Johannes Weber. Location of the pcap file does not matter, as it gets 
+In particular, I used 'The-Ultimate-PCAP.7z' by Johannes Weber. Location of the pcap file does not matter as it gets 
 uploaded on the website.
 
 ### Installing
