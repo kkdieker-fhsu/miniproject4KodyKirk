@@ -9,18 +9,20 @@ from .datafunctions import parse_pcap
 
 @login_required
 def index(request):
-
+    #get the 5 most recently seen endpoints and the 5 most talkative endpoints
     recent_endpoints = Endpoints.objects.order_by('-last_seen')[:5]
     talkative_endpoints = TrafficLog.objects.annotate(
         total_traffic=F('data_in') + F('data_out')
     ).order_by('-total_traffic')[:5]
 
+    #get the total number of endpoints and the total amount of traffic sent/received across all endpoints
     total_endpoints = Endpoints.objects.count()
     total_traffic = TrafficLog.objects.aggregate(
         total_data_in=Sum('data_in'),
         total_data_out=Sum('data_out'),
     )
 
+    #context for the webpage
     context = {
         'recent_endpoints': recent_endpoints,
         'talkative_endpoints': talkative_endpoints,
@@ -42,6 +44,7 @@ def endpoints(request):
     else:
         form = registerendpoint()
 
+    #get a list to display on the webpage
     endpoint_list = Endpoints.objects.order_by('ip_address')
     output = {'endpoint_list': endpoint_list,
               'form': form}
@@ -49,18 +52,26 @@ def endpoints(request):
 
 @login_required
 def traffic(request):
+    #upload a pcap
     form = uploadpcap()
     context = {'form': form}
     return render(request, "dash/traffic.html", context)
 
+#handles uploading the pcap and parsing
 @login_required
 def traffic_upload(request):
     if request.method == "POST":
         form = uploadpcap(request.POST, request.FILES)
         if form.is_valid():
-            known_ip, traffic = parse_pcap(request.FILES['file'])
+
+            #the dictionaries from the parsing function
+            known_ip, traffic = parse_pcap(request.FILE['file'])
+
+            #if the parsing function failed, return to traffic page
             if known_ip is None or traffic is None:
                 return HttpResponseRedirect(reverse("dash:traffic"))
+
+            #otherwise, save to the database
             else:
                 for ip, data in known_ip.items():
                     mac, timestamp = data
@@ -100,32 +111,14 @@ def traffic_upload(request):
 
 @login_required
 def detail(request, ip_address):
+    #finds the endpoint in question and any traffic associated with it
     endpoint = get_object_or_404(Endpoints, pk=ip_address)
     traffic = TrafficLog.objects.filter(ip_src=endpoint)
     return render(request, "dash/detail.html", {'endpoint': endpoint, 'traffic': traffic})
 
 @login_required
 def communications(request):
+    #gives all traffic data to the page for creating the table
     pairs = TrafficLog.objects.all()
     return render(request, "dash/communications.html", {'pairs': pairs})
 
-# @login_required
-# def endpoint_register(request):
-#     form = registerendpoint()
-#     context = {'form': form}
-#     return render(request, "dash/endpoint_register.html", context)
-#
-# @login_required
-# def endpoint_submission(request):
-#     if request.method == "POST":
-#         form = registerendpoint(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse("dash:endpoints"))
-#         else:
-#             context = {'form': form}
-#             return render(request, "dash/endpoint_register.html", context)
-#     return HttpResponseRedirect(reverse("dash:endpoint_register"))
-#
-#
-#

@@ -1,7 +1,5 @@
 from django.contrib import admin
-
-from .datafunctions import mac_addr
-from .models import Endpoints, TrafficLog
+from .models import Endpoints
 
 #due to using a composite primary key, this table cannot be registered in admin
 #admin.site.register(TrafficLog)
