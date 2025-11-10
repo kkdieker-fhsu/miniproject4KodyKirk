@@ -96,6 +96,10 @@ def parse_pcap(file):
             addition = {inet_to_str(ip.src): (mac_addr(eth.src), ts)}
             known_ip.update(addition)
 
+        elif inet_to_str(ip.dst) not in known_ip or known_ip[inet_to_str(ip.dst)][1] < ts:
+            addition = {inet_to_str(ip.dst): (mac_addr(eth.src), ts)}
+            known_ip.update(addition)
+
         if (inet_to_str(ip.src), inet_to_str(ip.dst)) not in traffic:
             #unique pair is the key, values are length of the packet, total number of packets, and the protocol
             new_traffic = {(inet_to_str(ip.src), inet_to_str(ip.dst)): [ip_len, 1, [protocol]]}
